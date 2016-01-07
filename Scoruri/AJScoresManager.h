@@ -25,6 +25,7 @@
 - (double)totalForPlayer:(AJPlayer *)player;
 - (AJPlayer *)insertNewPlayerWithName:(NSString *)playerName forGame:(AJGame *)game;
 - (void)insertNewScoreWithValue:(double)val forPlayer:(AJPlayer *)player;
+- (int)maximumNumberOfScoresForGame:(AJGame *)game;
 
 // For Testing purposes
 - (void)populateWithDummyData;

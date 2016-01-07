@@ -139,6 +139,7 @@
 				27300F6C1BB95EED00E3F184 /* Views */,
 				2707E4361B95DB980028F09E /* Utils */,
 				2707E4351B95DB800028F09E /* Model */,
+				273480A91C326D39008A2901 /* Abandoned */,
 				2707E3F51B95CD650028F09E /* AppDelegate.h */,
 				2707E3F61B95CD650028F09E /* AppDelegate.m */,
 				2707E3FB1B95CD650028F09E /* ViewController.h */,
@@ -209,7 +210,6 @@
 			isa = PBXGroup;
 			children = (
 				2707E3FE1B95CD650028F09E /* Main.storyboard */,
-				27300F681BB95E5500E3F184 /* VerticalScoresView.xib */,
 				2707E3F81B95CD650028F09E /* Scoruri.xcdatamodeld */,
 				27F200111BDA5E5B00ABE020 /* CenteredTextCell.xib */,
 			);
@@ -219,16 +219,26 @@
 		27300F6C1BB95EED00E3F184 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				27842BC31BD7D13E00D2FE5C /* AJScoreTableViewCell.h */,
-				27842BC41BD7D13E00D2FE5C /* AJScoreTableViewCell.m */,
 				27300F6D1BB95F0500E3F184 /* AJVerticalScoresView.h */,
 				27300F6A1BB95EE600E3F184 /* AJVerticalScoresView.m */,
-				2707551D1C16BF2400F23BF2 /* AJPlayerCollectionViewCell.h */,
-				2707551E1C16BF2400F23BF2 /* AJPlayerCollectionViewCell.m */,
+				27842BC31BD7D13E00D2FE5C /* AJScoreTableViewCell.h */,
+				27842BC41BD7D13E00D2FE5C /* AJScoreTableViewCell.m */,
 				274AFEFC1C19BB6B0003C78B /* AJPlayerHeaderView.h */,
 				274AFEFD1C19BB6B0003C78B /* AJPlayerHeaderView.m */,
 			);
 			name = Views;
+			sourceTree = "<group>";
+		};
+		273480A91C326D39008A2901 /* Abandoned */ = {
+			isa = PBXGroup;
+			children = (
+				27300F681BB95E5500E3F184 /* VerticalScoresView.xib */,
+				27DE768F1BDFD55600376FFB /* AJGameCollectionViewController.h */,
+				27DE76901BDFD55600376FFB /* AJGameCollectionViewController.m */,
+				2707551D1C16BF2400F23BF2 /* AJPlayerCollectionViewCell.h */,
+				2707551E1C16BF2400F23BF2 /* AJPlayerCollectionViewCell.m */,
+			);
+			name = Abandoned;
 			sourceTree = "<group>";
 		};
 		27CE39271B974C53006E4EB9 /* ViewControllers */ = {
@@ -242,8 +252,6 @@
 				27C8F9331B99CE4B00B5A39A /* AJScoresTableViewController.m */,
 				27300F6E1BB9706C00E3F184 /* AJPlayersScrollViewController.h */,
 				27300F6F1BB9709C00E3F184 /* AJPlayersScrollViewController.m */,
-				27DE768F1BDFD55600376FFB /* AJGameCollectionViewController.h */,
-				27DE76901BDFD55600376FFB /* AJGameCollectionViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";

@@ -8,25 +8,35 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="AJVerticalScoresView"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="AJVerticalScoresView">
-            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <rect key="frame" x="0.0" y="0.0" width="200" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="wmr-eD-HsY">
-                    <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                    <color key="backgroundColor" red="1" green="0.80000001190000003" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="wmr-eD-HsY">
+                    <rect key="frame" x="0.0" y="0.0" width="200" height="600"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="200" id="oNg-Jt-cMU"/>
+                    </constraints>
                 </tableView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="wmr-eD-HsY" secondAttribute="bottom" id="IVv-Qk-5zk"/>
-                <constraint firstItem="wmr-eD-HsY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Q0g-Jz-Goo"/>
-                <constraint firstAttribute="trailing" secondItem="wmr-eD-HsY" secondAttribute="trailing" id="Tnu-wB-lCQ"/>
-                <constraint firstItem="wmr-eD-HsY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="okl-gw-gCl"/>
+                <constraint firstAttribute="bottom" secondItem="wmr-eD-HsY" secondAttribute="bottom" id="EXs-oD-fMc"/>
+                <constraint firstAttribute="trailing" secondItem="wmr-eD-HsY" secondAttribute="trailing" constant="-500" id="Tnu-wB-lCQ"/>
+                <constraint firstItem="wmr-eD-HsY" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="j4l-jc-2Ro"/>
+                <constraint firstItem="wmr-eD-HsY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="laI-wp-35d"/>
             </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="Tnu-wB-lCQ"/>
+                </mask>
+            </variation>
             <connections>
                 <outlet property="scoresTable" destination="wmr-eD-HsY" id="aRB-ma-lpt"/>
             </connections>
-            <point key="canvasLocation" x="287" y="328.5"/>
+            <point key="canvasLocation" x="287" y="328"/>
         </view>
     </objects>
 </document>

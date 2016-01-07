@@ -38,6 +38,8 @@
     self.scores = [[(AppDelegate *)[[UIApplication sharedApplication] delegate] scoresManager] getScoresForPlayer:self.player];
     
     ((AJPlayerHeaderView *)self.tableView.tableHeaderView).playerLabel.text = self.playerName;
+    self.tableView.sectionHeaderHeight = 0.0;
+    self.tableView.sectionFooterHeight = 0.0;
     
     [self.tableView reloadData];
 }

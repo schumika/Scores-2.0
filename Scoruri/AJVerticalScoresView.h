@@ -21,10 +21,10 @@
 @interface AJVerticalScoresView : UIView
 
 @property (nonatomic, strong) AJPlayer *player;
-@property (nonatomic, readonly) IBOutlet UITableView *scoresTable;
+@property (nonatomic, strong) UITableView *scoresTable;
 @property (nonatomic, weak) id<AJVerticalScoresViewDelegate> delegate;
 
-- (id)initWithPlayer:(AJPlayer *)player;
-- (void)setXOffset:(CGFloat)xOffset andWidth:(CGFloat)width;
+//- (id)initWithPlayer:(AJPlayer *)player;
+- (id)initWithTableView:(UITableView *)tableView;
 
 @end

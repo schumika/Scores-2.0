@@ -187,6 +187,15 @@
     return total;
 }
 
+- (int)maximumNumberOfScoresForGame:(AJGame *)game {
+    int maxNumber = 0;
+    for (AJPlayer *player in game.players) {
+        int count = [player.scores count];
+        maxNumber = MAX(maxNumber, count);
+    }
+    return maxNumber;
+}
+
 #pragma mark - Initial Data
 
 - (void)populateWithDummyData {

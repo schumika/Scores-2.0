@@ -12,4 +12,8 @@
 
 @property (nonatomic, weak) IBOutlet UILabel *playerLabel;
 
+@property (nonatomic, weak) IBOutlet UILabel *playerNameLabel;
+@property (nonatomic, weak) IBOutlet UIImageView *playerImage;
+@property (nonatomic, weak) IBOutlet UILabel *playerTotalLabel;
+
 @end

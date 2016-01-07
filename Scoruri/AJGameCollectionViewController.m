@@ -6,6 +6,12 @@
 //  Copyright © 2015 Anca Julean. All rights reserved.
 //
 
+// IMPORTANT!!!!!!
+//
+// THIS APPROACH CANNOT BE USED BECAUSE THE COLLECTION VIEW ITEM CANNOT BE TALLER THAN THE COLLECTION VIEW ITSELF, SO VERTICAL SCROLLING IS NOT POSSIBLE
+//
+//
+
 #import "AJGameCollectionViewController.h"
 #import "AJPlayerCollectionViewCell.h"
 #import "AppDelegate.h"
@@ -16,10 +22,19 @@
 #define ADD_NEW_PLAYER_ALERT_TAG            100
 #define ADD_NEW_SCORE_ALERT_TAG             101
 
+@interface AJCollectionViewFlowLayout : UICollectionViewFlowLayout
+
+@property (nonatomic, assign) int numberOfScores;
+@property (nonatomic, assign) CGFloat collectionViewWidth;
+
+@end
+
+
 @interface AJGameCollectionViewController () <UIAlertViewDelegate, AJPlayerCollectionViewCellDelegate>
 
 @property (nonatomic, strong) AJScoresManager *scoresManager;
 @property (nonatomic, strong) NSIndexPath *selectedPlayerIndex;
+@property (nonatomic, assign) int maxNumberOfScores;
 
 @end
 
@@ -30,7 +45,7 @@ static NSString * const reuseIdentifier = @"PlayerCell";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UICollectionViewFlowLayout *collectionViewLayout = [[UICollectionViewFlowLayout alloc] init];
+    AJCollectionViewFlowLayout *collectionViewLayout = [[AJCollectionViewFlowLayout alloc] init];
     collectionViewLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     collectionViewLayout.minimumInteritemSpacing = 0.0;
     self.collectionView.collectionViewLayout = collectionViewLayout;
@@ -41,17 +56,21 @@ static NSString * const reuseIdentifier = @"PlayerCell";
     [self.navigationItem setRightBarButtonItem:barBtnItem];
     
     self.scoresManager = [(AppDelegate *)[[UIApplication sharedApplication] delegate] scoresManager];
+    self.collectionView.directionalLockEnabled = YES;
 }
 
 - (void)viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    UICollectionViewFlowLayout *flowLayout = (id)self.collectionView.collectionViewLayout;
+    AJCollectionViewFlowLayout *flowLayout = (id)self.collectionView.collectionViewLayout;
+    
+    flowLayout.numberOfScores = self.maxNumberOfScores;
+    flowLayout.collectionViewWidth = self.collectionView.frame.size.width;
     
     if (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation)) {
-        flowLayout.itemSize = CGSizeMake(170.0, self.collectionView.frame.size.height /*- CGRectGetHeight(self.navigationController.navigationBar.frame)*/);
+        flowLayout.itemSize = CGSizeMake(170.0, self.collectionView.frame.size.height);
     } else {
-        flowLayout.itemSize = CGSizeMake(120.0, self.collectionView.frame.size.height /*- CGRectGetHeight(self.navigationController.navigationBar.frame) - 20.0*/);
+        flowLayout.itemSize = CGSizeMake(120.0, self.collectionView.frame.size.height + 30.0/*flowLayout.collectionViewContentSize.height*/);
     }
     
     //[flowLayout invalidateLayout]; //force the elements to get laid out again with the new size
@@ -72,6 +91,8 @@ static NSString * const reuseIdentifier = @"PlayerCell";
     
     cell.player = player;
     [cell reloadUI];
+    
+    self.maxNumberOfScores = MAX(self.maxNumberOfScores, [player.scores count]);
     
     return cell;
 }
@@ -128,7 +149,7 @@ static NSString * const reuseIdentifier = @"PlayerCell";
             if ([[alertView textFieldAtIndex:0] text]) {
                 [self.scoresManager insertNewPlayerWithName:[[alertView textFieldAtIndex:0] text] forGame:self.game];
                 
-                [self.collectionView reloadData];
+                //[self.collectionView reloadData];
             }
             
         }
@@ -138,7 +159,10 @@ static NSString * const reuseIdentifier = @"PlayerCell";
             if ([[alertView textFieldAtIndex:0] text]) {
                 [self.scoresManager insertNewScoreWithValue:[[alertView textFieldAtIndex:0] text].doubleValue forPlayer:[self.scoresManager getPlayersForGame:self.game][self.selectedPlayerIndex.row]];
                 
-                [self.collectionView reloadItemsAtIndexPaths:@[self.selectedPlayerIndex]];
+                //[self.collectionView reloadItemsAtIndexPaths:@[self.selectedPlayerIndex]];
+                //[self.collectionView reloadData];
+                [(AJPlayerCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:self.selectedPlayerIndex] reloadUI];
+                NSLog(@"NSStringFromCGSize([self.collectionView contentSize]): %@", NSStringFromCGSize([self.collectionView contentSize]));
             }
             
         }
@@ -160,7 +184,17 @@ static NSString * const reuseIdentifier = @"PlayerCell";
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Add new score" message:@"Insert new score value:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
     alertView.tag = ADD_NEW_SCORE_ALERT_TAG;
     alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [(UITextField *)[alertView textFieldAtIndex:0] setKeyboardType:UIKeyboardTypeDecimalPad];
     [alertView show];
+}
+
+@end
+
+
+@implementation AJCollectionViewFlowLayout : UICollectionViewFlowLayout
+
+- (CGSize)collectionViewContentSize {
+    return CGSizeMake(700.0, self.numberOfScores * 30.0);
 }
 
 @end
