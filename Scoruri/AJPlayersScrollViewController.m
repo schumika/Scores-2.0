@@ -256,7 +256,7 @@ static const double kRowIndexesTableWidth = 40.0;
             if (!rowCell) {
                 rowCell = [[AJScoreTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"RowCell"];
             }
-            rowCell.valueLabel.text = [NSString stringWithFormat:@"%d", indexPath.row];
+            rowCell.valueLabel.text = [NSString stringWithFormat:@"%ld", (long)indexPath.row];
             
             cell = rowCell;
         }
