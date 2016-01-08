@@ -8,6 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@class AJGame;
+
+@protocol AJGamesTableViewControllerDelegate;
+
+
 @interface AJGamesTableViewController : UITableViewController
+
+@property (nonatomic, weak) id<AJGamesTableViewControllerDelegate> gamesDelegate;
+
+@end
+
+
+@protocol AJGamesTableViewControllerDelegate <NSObject>
+
+- (void)gamesTVC:(AJGamesTableViewController *)tvc didSelectGame:(AJGame *)game;
 
 @end

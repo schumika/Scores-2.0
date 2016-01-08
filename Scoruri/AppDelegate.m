@@ -11,6 +11,9 @@
 #import "AJPlayer.h"
 #import "AJScore.h"
 
+#import "AJGamesTableViewController.h"
+#import "AJPlayersScrollViewController.h"
+
 @interface AppDelegate ()
 
 @end
@@ -24,6 +27,17 @@
     self.scoresManager = [[AJScoresManager alloc] init];
     //[self.scoresManager populateWithDummyData];
     [self.scoresManager displayDBContents];
+    
+    UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
+    UINavigationController *masterNavigationController = [splitViewController.viewControllers objectAtIndex:0];
+    AJGamesTableViewController *gamesTableViewController = (AJGamesTableViewController *)masterNavigationController.topViewController;
+    UINavigationController *detailNavigationController = [splitViewController.viewControllers lastObject];
+    AJPlayersScrollViewController *playersScrollViewController = (AJPlayersScrollViewController *)detailNavigationController.topViewController;
+    gamesTableViewController.gamesDelegate = playersScrollViewController;
+    
+    playersScrollViewController.game = [[self.scoresManager getAllGames] objectAtIndex:0];
+    detailNavigationController.navigationItem.leftItemsSupplementBackButton = YES;
+    detailNavigationController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
     
     return YES;
 }
