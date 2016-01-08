@@ -232,6 +232,10 @@
 		273480A91C326D39008A2901 /* Abandoned */ = {
 			isa = PBXGroup;
 			children = (
+				27C8F92F1B99C3C100B5A39A /* AJPlayersTableViewController.h */,
+				27C8F9301B99C3C100B5A39A /* AJPlayersTableViewController.m */,
+				27C8F9321B99CE4B00B5A39A /* AJScoresTableViewController.h */,
+				27C8F9331B99CE4B00B5A39A /* AJScoresTableViewController.m */,
 				27300F681BB95E5500E3F184 /* VerticalScoresView.xib */,
 				27DE768F1BDFD55600376FFB /* AJGameCollectionViewController.h */,
 				27DE76901BDFD55600376FFB /* AJGameCollectionViewController.m */,
@@ -246,10 +250,6 @@
 			children = (
 				27CE39281B974C9A006E4EB9 /* AJGamesTableViewController.h */,
 				27CE39291B974C9A006E4EB9 /* AJGamesTableViewController.m */,
-				27C8F92F1B99C3C100B5A39A /* AJPlayersTableViewController.h */,
-				27C8F9301B99C3C100B5A39A /* AJPlayersTableViewController.m */,
-				27C8F9321B99CE4B00B5A39A /* AJScoresTableViewController.h */,
-				27C8F9331B99CE4B00B5A39A /* AJScoresTableViewController.m */,
 				27300F6E1BB9706C00E3F184 /* AJPlayersScrollViewController.h */,
 				27300F6F1BB9709C00E3F184 /* AJPlayersScrollViewController.m */,
 			);

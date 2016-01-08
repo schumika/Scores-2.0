@@ -20,6 +20,8 @@
 #import "AJScore.h"
 #import "AJPlayerHeaderView.h"
 #import "AJScoreTableViewCell.h"
+#import "AJGame+Additions.m"
+
 
 @interface AJPlayersScrollViewController() <UITableViewDataSource, UITableViewDelegate>
 
@@ -40,8 +42,6 @@ static const double kRowIndexesTableWidth = 40.0;
     
     self.scoresManager = [(AppDelegate *)[[UIApplication sharedApplication] delegate] scoresManager];
     self.scrollView.directionalLockEnabled = YES;
-    
-    self.title = self.game.name;
 }
 
 //- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
@@ -54,17 +54,27 @@ static const double kRowIndexesTableWidth = 40.0;
 //    }
 //}
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self reloadData];
-}
+//- (void)viewWillAppear:(BOOL)animated {
+//    [super viewWillAppear:animated];
+//    
+//    [self reloadData];
+//}
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self loadScrollViewData];
 }
 
+- (void)setGame:(AJGame *)game {
+    if (game != _game) {
+        _game = game;
+        
+        [self reloadData];
+    }
+}
+
 - (void)reloadData {
+    self.title = self.game.name;
+    
     self.players = [self.scoresManager getPlayersForGame:self.game];
     [self loadScrollViewData];
 }
@@ -323,6 +333,12 @@ static const double kRowIndexesTableWidth = 40.0;
             [alertView show];
         }
     }
+}
+
+#pragma mark - A
+
+- (void)gamesTVC:(AJGamesTableViewController *)tvc didSelectGame:(AJGame *)game {
+    self.game = game;
 }
 
 @end

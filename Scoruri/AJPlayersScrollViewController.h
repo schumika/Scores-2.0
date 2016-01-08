@@ -8,9 +8,10 @@
 
 
 #import <UIKit/UIKit.h>
-#import "AJGame.h"
+#import "AJGamesTableViewController.h"
 
-@interface AJPlayersScrollViewController : UIViewController
+
+@interface AJPlayersScrollViewController : UIViewController <AJGamesTableViewControllerDelegate>
 
 @property (nonatomic, strong) AJGame *game;
 

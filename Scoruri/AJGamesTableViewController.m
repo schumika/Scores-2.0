@@ -67,6 +67,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    [self.splitViewController showDetailViewController:(AJPlayersScrollViewController *)self.gamesDelegate sender:nil];
+    
+    __weak typeof(self) weakself = self;
+    if ([self.gamesDelegate respondsToSelector:@selector(gamesTVC:didSelectGame:)]) {
+        [self.gamesDelegate gamesTVC:weakself didSelectGame:self.games[indexPath.row]];
+    }
 }
 
 /*
@@ -102,27 +109,27 @@
     return YES;
 }
 */
-
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-    if ([segue.identifier  isEqualToString: @"showPlayers"]) {
-        if ([segue.destinationViewController respondsToSelector:@selector(setGame:)]) {
-            [(AJPlayersTableViewController *)segue.destinationViewController setGame:self.games[[self.tableView indexPathForSelectedRow].row]];
-        }
-    } else if ([segue.identifier isEqualToString:@"showPlayersVertical"]) {
-        if ([segue.destinationViewController respondsToSelector:@selector(setGame:)]) {
-            [(AJPlayersScrollViewController *)segue.destinationViewController setGame:self.games[[self.tableView indexPathForSelectedRow].row]];
-        }
-    } else if ([segue.identifier isEqualToString:@"showGameCollection"]) {
-        if ([segue.destinationViewController respondsToSelector:@selector(setGame:)]) {
-            [(AJGameCollectionViewController *)segue.destinationViewController setGame:self.games[[self.tableView indexPathForSelectedRow].row]];
-        }
-    }
-}
+//
+//#pragma mark - Navigation
+//
+//// In a storyboard-based application, you will often want to do a little preparation before navigation
+//- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+//    // Get the new view controller using [segue destinationViewController].
+//    // Pass the selected object to the new view controller.
+//    if ([segue.identifier  isEqualToString: @"showPlayers"]) {
+//        if ([segue.destinationViewController respondsToSelector:@selector(setGame:)]) {
+//            [(AJPlayersTableViewController *)segue.destinationViewController setGame:self.games[[self.tableView indexPathForSelectedRow].row]];
+//        }
+//    } else if ([segue.identifier isEqualToString:@"showPlayersVertical"]) {
+//        if ([segue.destinationViewController respondsToSelector:@selector(setGame:)]) {
+//            [(AJPlayersScrollViewController *)segue.destinationViewController setGame:self.games[[self.tableView indexPathForSelectedRow].row]];
+//        }
+//    } else if ([segue.identifier isEqualToString:@"showGameCollection"]) {
+//        if ([segue.destinationViewController respondsToSelector:@selector(setGame:)]) {
+//            [(AJGameCollectionViewController *)segue.destinationViewController setGame:self.games[[self.tableView indexPathForSelectedRow].row]];
+//        }
+//    }
+//}
 
 #pragma mark - Operations
 - (IBAction)addButtonClicked:(UIBarButtonItem *)sender {
