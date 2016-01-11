@@ -314,8 +314,6 @@ static const double kRowIndexesTableWidth = 40.0;
         }
     } else {
         
-        //[tableView deselectRowAtIndexPath:indexPath animated:YES];
-        
         self.selectedPlayer = self.players[tableView.tag];
         
         if (indexPath.section == 0) {
@@ -342,10 +340,21 @@ static const double kRowIndexesTableWidth = 40.0;
     }
 }
 
-#pragma mark - A
+#pragma mark - AJGamesTableViewControllerDelegate methods
 
 - (void)gamesTVC:(AJGamesTableViewController *)tvc didSelectGame:(AJGame *)game {
     self.game = game;
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"ShowGameSettings"]) {
+        UIViewController *ctrl = [(UINavigationController *)segue.destinationViewController topViewController];
+        if ([ctrl respondsToSelector:@selector(setGame:)]) {
+            [ctrl performSelector:@selector(setGame:) withObject:self.game];
+        }
+    }
 }
 
 @end

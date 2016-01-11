@@ -4,6 +4,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
     </dependencies>
     <scenes>
         <!--Games-->
@@ -306,6 +307,42 @@
             </objects>
             <point key="canvasLocation" x="1635" y="1639"/>
         </scene>
+        <!--Game Settings Table View Controller-->
+        <scene sceneID="2bb-LK-aQl">
+            <objects>
+                <tableViewController id="tvm-0S-Ogv" customClass="AJGameSettingsTableViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="z1M-g3-lFc">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="iGn-hH-9um">
+                                <rect key="frame" x="0.0" y="92" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iGn-hH-9um" id="mrJ-wd-ZiD">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="tvm-0S-Ogv" id="9uz-jZ-AuQ"/>
+                            <outlet property="delegate" destination="tvm-0S-Ogv" id="1LL-pY-dER"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="cAn-QB-wmw">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="FP1-wW-8sB">
+                            <connections>
+                                <action selector="cancelClicked:" destination="tvm-0S-Ogv" id="euS-yu-Uem"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="sKg-PW-HL4"/>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CGz-3o-VcJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3389" y="984"/>
+        </scene>
         <!--Game Collection View Controller-->
         <scene sceneID="v6g-ki-cLq">
             <objects>
@@ -433,7 +470,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KJm-EN-cxs" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2835" y="934"/>
+            <point key="canvasLocation" x="3902" y="924"/>
         </scene>
         <!--Split View Controller-->
         <scene sceneID="Ijs-1A-nLs">
@@ -516,11 +553,18 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Title" id="Qm3-Ta-jUC">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="Mln-SF-ef6">
-                            <connections>
-                                <action selector="addPlayerButtonClicked:" destination="FNL-9o-0RD" id="p4e-Ra-cCx"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="Mln-SF-ef6">
+                                <connections>
+                                    <action selector="addPlayerButtonClicked:" destination="FNL-9o-0RD" id="p4e-Ra-cCx"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="Settings" id="uSq-18-hOe">
+                                <connections>
+                                    <segue destination="F4J-Ek-f7c" kind="presentation" identifier="ShowGameSettings" id="J5n-Cz-g3Y"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <connections>
                         <outlet property="noGamesLabel" destination="rm9-q4-BwH" id="80y-OG-X0F"/>
@@ -611,5 +655,26 @@
             </objects>
             <point key="canvasLocation" x="1046" y="984"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="J6s-e5-NvN">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="F4J-Ek-f7c" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="487-bV-KZ5">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="tvm-0S-Ogv" kind="relationship" relationship="rootViewController" id="wxI-Ie-kmp"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VQd-ii-5KF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2577" y="984"/>
+        </scene>
     </scenes>
+    <resources>
+        <image name="Settings" width="20" height="20"/>
+    </resources>
 </document>

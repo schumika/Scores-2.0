@@ -26,6 +26,7 @@
 		274AFEFE1C19BB6B0003C78B /* AJPlayerHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 274AFEFD1C19BB6B0003C78B /* AJPlayerHeaderView.m */; };
 		27842BC51BD7D13E00D2FE5C /* AJScoreTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 27842BC41BD7D13E00D2FE5C /* AJScoreTableViewCell.m */; };
 		2786861E1B9DE0B800CB3ED2 /* AJGame+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2786861D1B9DE0B800CB3ED2 /* AJGame+Additions.m */; };
+		27994E001C43C4FE00BC46F7 /* AJGameSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27994DFF1C43C4FE00BC46F7 /* AJGameSettingsTableViewController.m */; };
 		27C8F9311B99C3C100B5A39A /* AJPlayersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C8F9301B99C3C100B5A39A /* AJPlayersTableViewController.m */; };
 		27C8F9341B99CE4B00B5A39A /* AJScoresTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C8F9331B99CE4B00B5A39A /* AJScoresTableViewController.m */; };
 		27CE392A1B974C9A006E4EB9 /* AJGamesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CE39291B974C9A006E4EB9 /* AJGamesTableViewController.m */; };
@@ -81,6 +82,8 @@
 		27842BC41BD7D13E00D2FE5C /* AJScoreTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AJScoreTableViewCell.m; sourceTree = "<group>"; };
 		2786861C1B9DE0B800CB3ED2 /* AJGame+Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AJGame+Additions.h"; sourceTree = "<group>"; };
 		2786861D1B9DE0B800CB3ED2 /* AJGame+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AJGame+Additions.m"; sourceTree = "<group>"; };
+		27994DFE1C43C4FE00BC46F7 /* AJGameSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJGameSettingsTableViewController.h; sourceTree = "<group>"; };
+		27994DFF1C43C4FE00BC46F7 /* AJGameSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AJGameSettingsTableViewController.m; sourceTree = "<group>"; };
 		27C8F92F1B99C3C100B5A39A /* AJPlayersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJPlayersTableViewController.h; sourceTree = "<group>"; };
 		27C8F9301B99C3C100B5A39A /* AJPlayersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AJPlayersTableViewController.m; sourceTree = "<group>"; };
 		27C8F9321B99CE4B00B5A39A /* AJScoresTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJScoresTableViewController.h; sourceTree = "<group>"; };
@@ -211,7 +214,6 @@
 			children = (
 				2707E3FE1B95CD650028F09E /* Main.storyboard */,
 				2707E3F81B95CD650028F09E /* Scoruri.xcdatamodeld */,
-				27F200111BDA5E5B00ABE020 /* CenteredTextCell.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -232,6 +234,7 @@
 		273480A91C326D39008A2901 /* Abandoned */ = {
 			isa = PBXGroup;
 			children = (
+				27F200111BDA5E5B00ABE020 /* CenteredTextCell.xib */,
 				27C8F92F1B99C3C100B5A39A /* AJPlayersTableViewController.h */,
 				27C8F9301B99C3C100B5A39A /* AJPlayersTableViewController.m */,
 				27C8F9321B99CE4B00B5A39A /* AJScoresTableViewController.h */,
@@ -252,6 +255,8 @@
 				27CE39291B974C9A006E4EB9 /* AJGamesTableViewController.m */,
 				27300F6E1BB9706C00E3F184 /* AJPlayersScrollViewController.h */,
 				27300F6F1BB9709C00E3F184 /* AJPlayersScrollViewController.m */,
+				27994DFE1C43C4FE00BC46F7 /* AJGameSettingsTableViewController.h */,
+				27994DFF1C43C4FE00BC46F7 /* AJGameSettingsTableViewController.m */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -364,6 +369,7 @@
 				2707E4391B95DBB50028F09E /* AJScoresManager.m in Sources */,
 				27300F701BB9709C00E3F184 /* AJPlayersScrollViewController.m in Sources */,
 				2707551F1C16BF2400F23BF2 /* AJPlayerCollectionViewCell.m in Sources */,
+				27994E001C43C4FE00BC46F7 /* AJGameSettingsTableViewController.m in Sources */,
 				27EBD1E21B9EB329005FE0A5 /* AJScore+Additions.m in Sources */,
 				27C8F9341B99CE4B00B5A39A /* AJScoresTableViewController.m in Sources */,
 				2707E3F71B95CD650028F09E /* AppDelegate.m in Sources */,
