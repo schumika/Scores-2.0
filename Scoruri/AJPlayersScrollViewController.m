@@ -21,9 +21,10 @@
 #import "AJPlayerHeaderView.h"
 #import "AJScoreTableViewCell.h"
 #import "AJGame+Additions.m"
+#import "AJGameSettingsTableViewController.h"
 
 
-@interface AJPlayersScrollViewController() <UITableViewDataSource, UITableViewDelegate>
+@interface AJPlayersScrollViewController() <UITableViewDataSource, UITableViewDelegate, AJGameSettingsTableViewControllerDelegate>
 
 @property (nonatomic, strong) NSArray *players;
 @property (nonatomic, strong) AJScoresManager *scoresManager;
@@ -346,6 +347,12 @@ static const double kRowIndexesTableWidth = 40.0;
     self.game = game;
 }
 
+#pragma mark - AJGameSettingsTableViewControllerDelegate methods
+
+-(void)gameSettingsTVCDidDeleteGame:(AJGameSettingsTableViewController *)gameSettingsTVC {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - Navigation
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
@@ -353,6 +360,7 @@ static const double kRowIndexesTableWidth = 40.0;
         UIViewController *ctrl = [(UINavigationController *)segue.destinationViewController topViewController];
         if ([ctrl respondsToSelector:@selector(setGame:)]) {
             [ctrl performSelector:@selector(setGame:) withObject:self.game];
+            [(AJGameSettingsTableViewController *)ctrl setDelegate:self];
         }
     }
 }

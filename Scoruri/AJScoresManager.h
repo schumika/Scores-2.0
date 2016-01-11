@@ -19,7 +19,8 @@
 
 // Public methods
 - (NSArray *)getAllGames;
-- (void)insertNewGameWithName:(NSString *)gameName; 
+- (void)insertNewGameWithName:(NSString *)gameName;
+- (void)deleteGame:(AJGame *)game;
 - (NSArray *)getPlayersForGame:(AJGame *)game;
 - (NSArray *)getScoresForPlayer:(AJPlayer *)player;
 - (double)totalForPlayer:(AJPlayer *)player;

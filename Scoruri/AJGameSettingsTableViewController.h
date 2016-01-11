@@ -10,8 +10,19 @@
 
 @class AJGame;
 
+@protocol AJGameSettingsTableViewControllerDelegate;
+
+
 @interface AJGameSettingsTableViewController : UITableViewController
 
 @property (nonatomic, strong) AJGame *game;
+@property (nonatomic, weak) id<AJGameSettingsTableViewControllerDelegate> delegate;
+
+@end
+
+
+@protocol AJGameSettingsTableViewControllerDelegate <NSObject>
+
+- (void)gameSettingsTVCDidDeleteGame:(AJGameSettingsTableViewController *)gameSettingsTVC;
 
 @end
