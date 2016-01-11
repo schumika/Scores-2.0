@@ -12,6 +12,7 @@
 #import "AppDelegate.h"
 #import "AJTextFieldTableViewCell.h"
 #import "AJImageTextTableViewCell.h"
+#import "AJPlayerSettingsTableViewController.h"
 
 @interface AJGameSettingsTableViewController () <UITextFieldDelegate>
 
@@ -28,14 +29,20 @@
     [super viewDidLoad];
     
     self.scoresManager = [(AppDelegate *)[[UIApplication sharedApplication] delegate] scoresManager];
-    self.tableView.editing = YES;
-    self.players = [self.scoresManager getPlayersForGame:self.game];
+    //self.tableView.editing = YES;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    [self reloadData];
+}
+
+- (void)reloadData {
     self.title = self.game.name;
+    self.players = [self.scoresManager getPlayersForGame:self.game];
+    [self.tableView reloadData];
 }
 
 - (void)dealloc {
@@ -109,6 +116,10 @@
     return cell;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return (section == 0) ? @"Game name" : (section == 1) ? @"Players" : @"";
+}
+
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         // delete player
@@ -121,16 +132,7 @@
     }
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return (section == 0) ? @"Game name" : (section == 1) ? @"Players" : @"";
-}
-
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return (indexPath.section == 1);
-}
-
-
-#pragma mark -
+#pragma mark - UITextFieldDelegate methods
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     [textField resignFirstResponder];
@@ -140,6 +142,28 @@
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     self.game.name = textField.text;
     self.title = textField.text;
+}
+
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"ShowPlayerSettings"]) {
+        UIViewController *ctrl = [(UINavigationController *)segue.destinationViewController topViewController];
+        
+        if ([ctrl respondsToSelector:@selector(setPlayer:)]) {
+            int playerIndex = 0;
+            
+            for (int plind = 0; plind < self.players.count; plind++) {
+                UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:plind inSection:1]];
+                if ([cell isEqual:sender]) {
+                    playerIndex = plind;
+                    break;
+                }
+            }
+            
+            [ctrl performSelector:@selector(setPlayer:) withObject:self.players[playerIndex]];
+        }
+    }
 }
 
 @end
