@@ -76,7 +76,6 @@ static const double kRowIndexesTableWidth = 40.0;
 }
 
 - (void)reloadData {
-    
     self.navigationItem.rightBarButtonItem.enabled = (self.game != nil);
     self.title = (self.game != nil) ? self.game.name : @"<No game>";
     self.noGamesLabel.hidden = (self.game != nil);

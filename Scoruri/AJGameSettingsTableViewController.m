@@ -9,8 +9,9 @@
 #import "AJGameSettingsTableViewController.h"
 #import "AJGame+Additions.h"
 #import "AppDelegate.h"
+#import "AJTextFieldTableViewCell.h"
 
-@interface AJGameSettingsTableViewController ()
+@interface AJGameSettingsTableViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) AJScoresManager *scoresManager;
 
@@ -42,6 +43,14 @@
     [self.navigationController dismissViewControllerAnimated:YES completion:NULL];
 }
 
+- (IBAction)doneClicked:(id)sender {
+    self.game.name = [[(AJTextFieldTableViewCell *)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] textField] text];
+    
+    [self.scoresManager saveContext];
+    
+    [self.navigationController dismissViewControllerAnimated:YES completion:NULL];
+}
+
 - (IBAction)deleteClicked:(id)sender {
     [self.scoresManager deleteGame:self.game];
     
@@ -54,6 +63,10 @@
 
 #pragma mark - UITableViewDatasource methods
 
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 2;
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
 }
@@ -62,6 +75,15 @@
     UITableViewCell *cell = nil;
     
     if (indexPath.section == 0) {
+        AJTextFieldTableViewCell *gameNameCell = [tableView dequeueReusableCellWithIdentifier:@"GameNameCell"];
+        if (!gameNameCell) {
+            gameNameCell = [[AJTextFieldTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"GameNameCell"];
+        }
+        gameNameCell.textField.text = self.game.name;
+        gameNameCell.textField.delegate = self;
+        
+        cell = gameNameCell;
+    } else if (indexPath.section == 1) {
         UITableViewCell *deleteCell = [tableView dequeueReusableCellWithIdentifier:@"DeleteCell"];
         if (!deleteCell) {
             deleteCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DeleteCell"];
@@ -71,6 +93,19 @@
     }
     
     return cell;
+}
+
+
+#pragma mark -
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    self.game.name = textField.text;
+    self.title = textField.text;
 }
 
 @end

@@ -27,6 +27,7 @@
 		27842BC51BD7D13E00D2FE5C /* AJScoreTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 27842BC41BD7D13E00D2FE5C /* AJScoreTableViewCell.m */; };
 		2786861E1B9DE0B800CB3ED2 /* AJGame+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2786861D1B9DE0B800CB3ED2 /* AJGame+Additions.m */; };
 		27994E001C43C4FE00BC46F7 /* AJGameSettingsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27994DFF1C43C4FE00BC46F7 /* AJGameSettingsTableViewController.m */; };
+		27994E0B1C43DC0E00BC46F7 /* AJTextFieldTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 27994E0A1C43DC0E00BC46F7 /* AJTextFieldTableViewCell.m */; };
 		27C8F9311B99C3C100B5A39A /* AJPlayersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C8F9301B99C3C100B5A39A /* AJPlayersTableViewController.m */; };
 		27C8F9341B99CE4B00B5A39A /* AJScoresTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27C8F9331B99CE4B00B5A39A /* AJScoresTableViewController.m */; };
 		27CE392A1B974C9A006E4EB9 /* AJGamesTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 27CE39291B974C9A006E4EB9 /* AJGamesTableViewController.m */; };
@@ -84,6 +85,8 @@
 		2786861D1B9DE0B800CB3ED2 /* AJGame+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AJGame+Additions.m"; sourceTree = "<group>"; };
 		27994DFE1C43C4FE00BC46F7 /* AJGameSettingsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJGameSettingsTableViewController.h; sourceTree = "<group>"; };
 		27994DFF1C43C4FE00BC46F7 /* AJGameSettingsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AJGameSettingsTableViewController.m; sourceTree = "<group>"; };
+		27994E091C43DC0E00BC46F7 /* AJTextFieldTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJTextFieldTableViewCell.h; sourceTree = "<group>"; };
+		27994E0A1C43DC0E00BC46F7 /* AJTextFieldTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AJTextFieldTableViewCell.m; sourceTree = "<group>"; };
 		27C8F92F1B99C3C100B5A39A /* AJPlayersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJPlayersTableViewController.h; sourceTree = "<group>"; };
 		27C8F9301B99C3C100B5A39A /* AJPlayersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AJPlayersTableViewController.m; sourceTree = "<group>"; };
 		27C8F9321B99CE4B00B5A39A /* AJScoresTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AJScoresTableViewController.h; sourceTree = "<group>"; };
@@ -227,6 +230,8 @@
 				27842BC41BD7D13E00D2FE5C /* AJScoreTableViewCell.m */,
 				274AFEFC1C19BB6B0003C78B /* AJPlayerHeaderView.h */,
 				274AFEFD1C19BB6B0003C78B /* AJPlayerHeaderView.m */,
+				27994E091C43DC0E00BC46F7 /* AJTextFieldTableViewCell.h */,
+				27994E0A1C43DC0E00BC46F7 /* AJTextFieldTableViewCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -365,6 +370,7 @@
 			files = (
 				2786861E1B9DE0B800CB3ED2 /* AJGame+Additions.m in Sources */,
 				2707E4321B95D60A0028F09E /* AJGame.m in Sources */,
+				27994E0B1C43DC0E00BC46F7 /* AJTextFieldTableViewCell.m in Sources */,
 				27DE76911BDFD55600376FFB /* AJGameCollectionViewController.m in Sources */,
 				2707E4391B95DBB50028F09E /* AJScoresManager.m in Sources */,
 				27300F701BB9709C00E3F184 /* AJPlayersScrollViewController.m in Sources */,

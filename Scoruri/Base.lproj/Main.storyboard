@@ -317,13 +317,44 @@
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <inset key="separatorInset" minX="10" minY="0.0" maxX="10" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="GameNameCell" id="iGn-hH-9um">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="GameNameCell" id="iGn-hH-9um" customClass="AJTextFieldTableViewCell">
                                 <rect key="frame" x="0.0" y="114" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iGn-hH-9um" id="mrJ-wd-ZiD">
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Game name" textAlignment="natural" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="bfn-4L-DSM">
+                                            <rect key="frame" x="118" y="7" width="474" height="30"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                            <connections>
+                                                <outlet property="delegate" destination="tvm-0S-Ogv" id="r7F-3x-ipK"/>
+                                            </connections>
+                                        </textField>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Game name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7T5-VH-vlY">
+                                            <rect key="frame" x="8" y="11" width="102" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="102" id="rLY-Id-7ne"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                    <constraints>
+                                        <constraint firstItem="7T5-VH-vlY" firstAttribute="centerY" secondItem="mrJ-wd-ZiD" secondAttribute="centerY" id="Alc-iE-G4c"/>
+                                        <constraint firstAttribute="leadingMargin" secondItem="7T5-VH-vlY" secondAttribute="leading" id="BAf-Eb-2EO"/>
+                                        <constraint firstItem="bfn-4L-DSM" firstAttribute="leading" secondItem="7T5-VH-vlY" secondAttribute="trailing" constant="8" id="ECI-rN-LkS"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="bfn-4L-DSM" secondAttribute="trailing" id="Plf-uN-YNR"/>
+                                        <constraint firstItem="bfn-4L-DSM" firstAttribute="centerY" secondItem="mrJ-wd-ZiD" secondAttribute="centerY" id="mJp-Tw-RhZ"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="textField" destination="bfn-4L-DSM" id="ilq-OV-yeU"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="PlayerCell" id="6Q2-ed-SCe">
                                 <rect key="frame" x="0.0" y="158" width="600" height="44"/>
@@ -372,7 +403,11 @@
                                 <action selector="cancelClicked:" destination="tvm-0S-Ogv" id="euS-yu-Uem"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="sKg-PW-HL4"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="sKg-PW-HL4">
+                            <connections>
+                                <action selector="doneClicked:" destination="tvm-0S-Ogv" id="27g-s0-Akw"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CGz-3o-VcJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
