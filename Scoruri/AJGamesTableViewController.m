@@ -68,8 +68,6 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
     [self.splitViewController showDetailViewController:[(AJPlayersScrollViewController *)self.gamesDelegate navigationController] sender:nil];
     
     __weak typeof(self) weakself = self;

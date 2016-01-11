@@ -265,7 +265,7 @@ static const double kRowIndexesTableWidth = 40.0;
             if (!emptyRowCell) {
                 emptyRowCell = [[AJScoreTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyRowCell"];
             }
-            emptyRowCell.valueLabel.text = @"";
+            //emptyRowCell.valueLabel.text = @"";
             
             cell = emptyRowCell;
         } else {
