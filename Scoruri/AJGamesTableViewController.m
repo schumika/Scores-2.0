@@ -5,6 +5,8 @@
 //  Created by Anca Julean on 9/2/15.
 //  Copyright (c) 2015 Anca Julean. All rights reserved.
 //
+//
+//  project management link: https://projects.zoho.com/
 
 #import "AJGamesTableViewController.h"
 #import "AJGame.h"
