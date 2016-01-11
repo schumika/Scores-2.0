@@ -31,6 +31,8 @@
 @property (nonatomic, strong) AJPlayer *selectedPlayer;
 @property (nonatomic, strong) AJScore *selectedScore;
 
+@property (weak, nonatomic) IBOutlet UILabel *noGamesLabel;
+
 @end
 
 static const double kRowIndexesTableWidth = 40.0;
@@ -54,11 +56,11 @@ static const double kRowIndexesTableWidth = 40.0;
 //    }
 //}
 
-//- (void)viewWillAppear:(BOOL)animated {
-//    [super viewWillAppear:animated];
-//    
-//    [self reloadData];
-//}
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self reloadData];
+}
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
     [self loadScrollViewData];
@@ -73,10 +75,15 @@ static const double kRowIndexesTableWidth = 40.0;
 }
 
 - (void)reloadData {
-    self.title = self.game.name;
     
-    self.players = [self.scoresManager getPlayersForGame:self.game];
-    [self loadScrollViewData];
+    self.navigationItem.rightBarButtonItem.enabled = (self.game != nil);
+    self.title = (self.game != nil) ? self.game.name : @"<No game>";
+    self.noGamesLabel.hidden = (self.game != nil);
+    
+    if (self.game) {
+        self.players = [self.scoresManager getPlayersForGame:self.game];
+        [self loadScrollViewData];
+    }
 }
 
 - (void)loadScrollViewData {

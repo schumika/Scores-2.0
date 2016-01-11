@@ -26,7 +26,7 @@
     
     self.scoresManager = [[AJScoresManager alloc] init];
     //[self.scoresManager populateWithDummyData];
-    [self.scoresManager displayDBContents];
+    //[self.scoresManager displayDBContents];
     
     UISplitViewController *splitViewController = (UISplitViewController *)self.window.rootViewController;
     UINavigationController *masterNavigationController = [splitViewController.viewControllers objectAtIndex:0];
@@ -35,7 +35,8 @@
     AJPlayersScrollViewController *playersScrollViewController = (AJPlayersScrollViewController *)detailNavigationController.topViewController;
     gamesTableViewController.gamesDelegate = playersScrollViewController;
     
-    playersScrollViewController.game = [[self.scoresManager getAllGames] objectAtIndex:0];
+    NSArray *games = [self.scoresManager getAllGames];
+    playersScrollViewController.game = [games count] ? games[0] : nil;
     detailNavigationController.navigationItem.leftItemsSupplementBackButton = YES;
     detailNavigationController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
     
