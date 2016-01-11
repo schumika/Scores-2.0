@@ -25,6 +25,7 @@
 - (NSArray *)getScoresForPlayer:(AJPlayer *)player;
 - (double)totalForPlayer:(AJPlayer *)player;
 - (AJPlayer *)insertNewPlayerWithName:(NSString *)playerName forGame:(AJGame *)game;
+- (void)deletePlayer:(AJPlayer *)player;
 - (void)insertNewScoreWithValue:(double)val forPlayer:(AJPlayer *)player;
 - (int)maximumNumberOfScoresForGame:(AJGame *)game;
 

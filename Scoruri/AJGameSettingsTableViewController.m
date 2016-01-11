@@ -8,12 +8,15 @@
 
 #import "AJGameSettingsTableViewController.h"
 #import "AJGame+Additions.h"
+#import "AJPlayer+Additions.h"
 #import "AppDelegate.h"
 #import "AJTextFieldTableViewCell.h"
+#import "AJImageTextTableViewCell.h"
 
 @interface AJGameSettingsTableViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) AJScoresManager *scoresManager;
+@property (nonatomic, strong) NSArray *players;
 
 @end
 
@@ -25,6 +28,8 @@
     [super viewDidLoad];
     
     self.scoresManager = [(AppDelegate *)[[UIApplication sharedApplication] delegate] scoresManager];
+    self.tableView.editing = YES;
+    self.players = [self.scoresManager getPlayersForGame:self.game];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -64,11 +69,11 @@
 #pragma mark - UITableViewDatasource methods
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 1;
+    return (section == 1) ? [self.game.players count] : 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -84,6 +89,15 @@
         
         cell = gameNameCell;
     } else if (indexPath.section == 1) {
+        AJImageTextTableViewCell *playerCell = [tableView dequeueReusableCellWithIdentifier:@"PlayerCell"];
+        if (!playerCell) {
+            playerCell = [[AJImageTextTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"PlayerCell"];
+        }
+        
+        playerCell.nameLabel.text = [(AJPlayer *)self.players[indexPath.row] name];
+        
+        cell = playerCell;
+    } else if (indexPath.section == 2) {
         UITableViewCell *deleteCell = [tableView dequeueReusableCellWithIdentifier:@"DeleteCell"];
         if (!deleteCell) {
             deleteCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"DeleteCell"];
@@ -93,6 +107,26 @@
     }
     
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        // delete player
+        [tableView beginUpdates];
+        AJPlayer *player = (AJPlayer *)self.players[indexPath.row];
+        [self.scoresManager deletePlayer:player];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
+        self.players = [self.scoresManager getPlayersForGame:self.game];
+        [tableView endUpdates];
+    }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+    return (section == 0) ? @"Game name" : (section == 1) ? @"Players" : @"";
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return (indexPath.section == 1);
 }
 
 
