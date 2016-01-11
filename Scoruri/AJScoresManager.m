@@ -158,6 +158,10 @@
     return player;
 }
 
+- (void)deletePlayer:(AJPlayer *)player {
+    [self.managedObjectContext deleteObject:player];
+}
+
 - (NSArray *)getScoresForPlayer:(AJPlayer *)player {
     NSError *error = nil;
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Score"];
