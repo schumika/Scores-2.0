@@ -99,7 +99,7 @@ static const double kRowIndexesTableWidth = 40.0;
     CGFloat tableHeaderHeight = 62.0;
     
     CGFloat verticalViewWidth = MAX((CGRectGetWidth(self.view.bounds) - kRowIndexesTableWidth) / numberOfPlayers, 90.0) ;
-    CGFloat verticalViewHeight = MAX(CGRectGetHeight(self.scrollView.frame), [self.scoresManager maximumNumberOfScoresForGame:self.game] * 40.0 + topBarHeight + tableHeaderHeight);
+    CGFloat verticalViewHeight = MAX(CGRectGetHeight(self.scrollView.frame), ([self.scoresManager maximumNumberOfScoresForGame:self.game] + 1) * 40.0 + topBarHeight + tableHeaderHeight);
     
     CGFloat verticalWidthRatio = verticalViewWidth / self.view.bounds.size.width;
     
@@ -196,6 +196,8 @@ static const double kRowIndexesTableWidth = 40.0;
 #pragma mark - UIAlertViewDelegate methods
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [[alertView textFieldAtIndex:0] resignFirstResponder];
+    
     if (alertView.tag == ADD_NEW_PLAYER_ALERT_TAG) {
         if (buttonIndex != alertView.cancelButtonIndex) {
             AJPlayer *player = [self.scoresManager insertNewPlayerWithName:[[alertView textFieldAtIndex:0] text] forGame:self.game];
@@ -246,14 +248,14 @@ static const double kRowIndexesTableWidth = 40.0;
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return (tableView.tag == -1) ? 2 : 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (tableView.tag == -1) {
-        return section == 0 ? 1 : [self.scoresManager maximumNumberOfScoresForGame:self.game];
+        return (section == 0 ? [self.scoresManager maximumNumberOfScoresForGame:self.game] : 1);
     }
-    return section == 0 ? 1 : [[self.players[tableView.tag] scores] count];
+    return [[self.players[tableView.tag] scores] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -261,14 +263,6 @@ static const double kRowIndexesTableWidth = 40.0;
     
     if (tableView.tag == -1) {
         if (indexPath.section == 0) {
-            AJScoreTableViewCell *emptyRowCell = [tableView dequeueReusableCellWithIdentifier:@"EmptyRowCell"];
-            if (!emptyRowCell) {
-                emptyRowCell = [[AJScoreTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"EmptyRowCell"];
-            }
-            //emptyRowCell.valueLabel.text = @"";
-            
-            cell = emptyRowCell;
-        } else {
             AJScoreTableViewCell *rowCell = [tableView dequeueReusableCellWithIdentifier:@"RowCell"];
             if (!rowCell) {
                 rowCell = [[AJScoreTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"RowCell"];
@@ -276,34 +270,30 @@ static const double kRowIndexesTableWidth = 40.0;
             rowCell.valueLabel.text = [NSString stringWithFormat:@"%ld", (long)indexPath.row + 1];
             
             cell = rowCell;
+        } else {
+            AJScoreTableViewCell *addRoundCell = [tableView dequeueReusableCellWithIdentifier:@"AddRoundCell"];
+            if (!addRoundCell) {
+                addRoundCell = [[AJScoreTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddRoundCell"];
+            }
+            
+            cell = addRoundCell;
         }
     } else {
-        
-        if (indexPath.section == 0) {
-            AJScoreTableViewCell *addScoreCell = [tableView dequeueReusableCellWithIdentifier:@"addScoreCell"];
-            if (!addScoreCell) {
-                addScoreCell = [[AJScoreTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"addScoreCell"];
-            }
-            addScoreCell.valueLabel.text = @"+";
-            
-            cell = addScoreCell;
-        } else {
-            AJScoreTableViewCell *scoreCell = [tableView dequeueReusableCellWithIdentifier:@"scoreCell"];
-            if (!scoreCell) {
-                scoreCell = [[AJScoreTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"scoreCell"];
-            }
-            AJScore *score = [self.scoresManager getScoresForPlayer:self.players[tableView.tag]][indexPath.row];
-            scoreCell.valueLabel.text = [NSString stringWithFormat:@"%g", score.value.doubleValue];
-            
-            cell = scoreCell;
+        AJScoreTableViewCell *scoreCell = [tableView dequeueReusableCellWithIdentifier:@"scoreCell"];
+        if (!scoreCell) {
+            scoreCell = [[AJScoreTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"scoreCell"];
         }
+        AJScore *score = [self.scoresManager getScoresForPlayer:self.players[tableView.tag]][indexPath.row];
+        scoreCell.valueLabel.text = [NSString stringWithFormat:@"%g", score.value.doubleValue];
+        
+        cell = scoreCell;
     }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView.tag == -1) {
-        if (indexPath.section == 1) {
+        if (indexPath.section == 0) {
             [self.scrollView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
                 if ([view isKindOfClass:[UITableView class]]) {
                     if ([[(UITableView *)view tableHeaderView] isKindOfClass:[AJPlayerHeaderView class]]) {
@@ -311,32 +301,27 @@ static const double kRowIndexesTableWidth = 40.0;
                     }
                 }
             }];
+        } else if (indexPath.section == 1) {
+            for (AJPlayer *player in self.players) {
+                [self.scoresManager insertNewScoreWithValue:0.0 forPlayer:player];
+            }
+            
+            [self reloadData];
         }
     } else {
         
         self.selectedPlayer = self.players[tableView.tag];
         
-        if (indexPath.section == 0) {
-            // user clicked add score
-            
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Add new score for %@", self.selectedPlayer.name]
-                                                                message:@"Insert new score:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-            alertView.tag = ADD_NEW_SCORE_ALERT_TAG;
-            alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-            [alertView textFieldAtIndex:0].keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-            [alertView show];
-        } else {
-            // user clicked on existing score to edit
-            
-            self.selectedScore = [self.scoresManager getScoresForPlayer:self.players[tableView.tag]][indexPath.row];;
-            
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Edit score for %@", self.selectedScore.player.name]
-                                                                message:@"New score:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
-            alertView.tag = EDIT_SCORE_ALERT_TAG;
-            alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
-            [alertView textFieldAtIndex:0].keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-            [alertView show];
-        }
+        // user clicked on existing score to edit
+        
+        self.selectedScore = [self.scoresManager getScoresForPlayer:self.players[tableView.tag]][indexPath.row];;
+        
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Edit score for %@", self.selectedScore.player.name]
+                                                            message:@"New score:" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK", nil];
+        alertView.tag = EDIT_SCORE_ALERT_TAG;
+        alertView.alertViewStyle = UIAlertViewStylePlainTextInput;
+        [alertView textFieldAtIndex:0].keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+        [alertView show];
     }
 }
 
