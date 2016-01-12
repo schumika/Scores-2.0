@@ -127,13 +127,13 @@
                                         <constraint firstAttribute="height" constant="21" id="2x1-om-hSx"/>
                                     </constraints>
                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="textColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="VUb-3m-hYv">
                                     <rect key="frame" x="8" y="12" width="154" height="21"/>
                                     <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="textColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
@@ -160,31 +160,8 @@
                             </connections>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="addScoreCell" id="Tjj-Ox-Yuh" customClass="AJScoreTableViewCell">
-                                <rect key="frame" x="0.0" y="90" width="170" height="40"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tjj-Ox-Yuh" id="pKg-xL-XPy">
-                                    <rect key="frame" x="0.0" y="0.0" width="170" height="39"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4XF-4g-bf3">
-                                            <rect key="frame" x="64" y="9" width="42" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="4XF-4g-bf3" firstAttribute="centerX" secondItem="pKg-xL-XPy" secondAttribute="centerX" id="7QD-qe-gee"/>
-                                        <constraint firstItem="4XF-4g-bf3" firstAttribute="centerY" secondItem="pKg-xL-XPy" secondAttribute="centerY" id="ov3-k6-RM1"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="valueLabel" destination="4XF-4g-bf3" id="40W-EQ-Gzg"/>
-                                </connections>
-                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="scoreCell" id="m52-yx-j4W" customClass="AJScoreTableViewCell">
-                                <rect key="frame" x="0.0" y="130" width="170" height="40"/>
+                                <rect key="frame" x="0.0" y="90" width="170" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="m52-yx-j4W" id="A1I-n5-Eqs">
                                     <rect key="frame" x="0.0" y="0.0" width="170" height="39"/>
@@ -246,33 +223,8 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="EmptyRowCell" id="cVR-X4-ehh" customClass="AJScoreTableViewCell">
-                                <rect key="frame" x="0.0" y="90" width="60" height="40"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cVR-X4-ehh" id="AVg-WD-eXm">
-                                    <rect key="frame" x="0.0" y="0.0" width="60" height="39"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="#" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PLG-mk-Kez">
-                                            <rect key="frame" x="9" y="9" width="42" height="21"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="PLG-mk-Kez" firstAttribute="centerY" secondItem="AVg-WD-eXm" secondAttribute="centerY" id="D8s-Ew-6Sv"/>
-                                        <constraint firstItem="PLG-mk-Kez" firstAttribute="leading" secondItem="AVg-WD-eXm" secondAttribute="leadingMargin" constant="1" id="EcJ-qe-Dws"/>
-                                        <constraint firstItem="PLG-mk-Kez" firstAttribute="centerX" secondItem="AVg-WD-eXm" secondAttribute="centerX" id="WPe-s2-Zm2"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <connections>
-                                    <outlet property="valueLabel" destination="PLG-mk-Kez" id="Sab-bm-xek"/>
-                                </connections>
-                            </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="RowCell" id="6tv-xa-ibh" customClass="AJScoreTableViewCell">
-                                <rect key="frame" x="0.0" y="130" width="60" height="40"/>
+                                <rect key="frame" x="0.0" y="90" width="60" height="40"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6tv-xa-ibh" id="V6A-ug-ICv">
                                     <rect key="frame" x="0.0" y="0.0" width="60" height="39"/>
@@ -281,7 +233,7 @@
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9pi-8l-GHJ">
                                             <rect key="frame" x="9" y="9" width="42" height="21"/>
                                             <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
-                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
@@ -293,6 +245,30 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
                                     <outlet property="valueLabel" destination="9pi-8l-GHJ" id="tSe-pc-yvn"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="gray" indentationWidth="10" reuseIdentifier="AddRoundCell" id="KGe-Kk-FpV" customClass="AJScoreTableViewCell">
+                                <rect key="frame" x="0.0" y="130" width="60" height="40"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGe-Kk-FpV" id="BM9-BD-dSg">
+                                    <rect key="frame" x="0.0" y="0.0" width="60" height="39"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="+" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sx8-wf-59p">
+                                            <rect key="frame" x="25" y="9" width="11" height="21"/>
+                                            <fontDescription key="fontDescription" type="italicSystem" pointSize="17"/>
+                                            <color key="textColor" red="0.25098040700000002" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="Sx8-wf-59p" firstAttribute="centerX" secondItem="BM9-BD-dSg" secondAttribute="centerX" id="i5I-bR-pUy"/>
+                                        <constraint firstItem="Sx8-wf-59p" firstAttribute="centerY" secondItem="BM9-BD-dSg" secondAttribute="centerY" id="vcQ-bw-4yx"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <outlet property="valueLabel" destination="Sx8-wf-59p" id="xFG-Cw-CFP"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
