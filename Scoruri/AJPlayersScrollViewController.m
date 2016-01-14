@@ -32,6 +32,8 @@
 @property (nonatomic, strong) AJPlayer *selectedPlayer;
 @property (nonatomic, strong) AJScore *selectedScore;
 
+@property (nonatomic, strong) NSArray *tables;
+
 @property (weak, nonatomic) IBOutlet UILabel *noGamesLabel;
 
 @end
@@ -87,25 +89,19 @@ static const double kRowIndexesTableWidth = 40.0;
 }
 
 - (void)loadScrollViewData {
-    if ([self.scrollView.subviews count] > 0) {
-        for (UIView *scrollViewSubview in self.scrollView.subviews) {
-            [scrollViewSubview removeFromSuperview];
-        }
-    }
+
+    [self removeTableViews];
     
     int numberOfPlayers = (int)[self.players count];
     
-    CGFloat topBarHeight = self.navigationController.navigationBar.frame.size.height;
-    CGFloat tableHeaderHeight = 62.0;
-    
     CGFloat verticalViewWidth = MAX((CGRectGetWidth(self.view.bounds) - kRowIndexesTableWidth) / numberOfPlayers, 90.0) ;
-    CGFloat verticalViewHeight = MAX(CGRectGetHeight(self.scrollView.frame), ([self.scoresManager maximumNumberOfScoresForGame:self.game] + 1) * 40.0 + topBarHeight + tableHeaderHeight);
     
-    CGFloat verticalWidthRatio = verticalViewWidth / self.view.bounds.size.width;
+    //CGFloat verticalWidthRatio = verticalViewWidth / self.view.bounds.size.width;
     
     CGFloat contentSizeWidth = verticalViewWidth * numberOfPlayers + kRowIndexesTableWidth;
-    CGFloat contentSizeHeight = verticalViewHeight;
+    CGFloat contentSizeHeight = CGRectGetHeight(self.scrollView.frame);
     
+     NSMutableArray *tablesArray = [NSMutableArray array];
     
     UITableView *rowIndexesTableView = [(UITableViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"RowIndexes"] tableView];
     rowIndexesTableView.tag = -1;
@@ -119,21 +115,23 @@ static const double kRowIndexesTableWidth = 40.0;
     
     NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0.0];
     NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:verticalViewHeight];
-    NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeWidth multiplier:(kRowIndexesTableWidth/self.view.frame.size.width) constant:0.0];
+    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+    NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:kRowIndexesTableWidth];
     
     [self.scrollView addConstraints:@[xConstraint, yConstraint, heightConstraint, widthConstraint]];
-    
-    
-
+    [rowIndexesTableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:NULL];
+    [tablesArray addObject:rowIndexesTableView];
     
     self.scrollView.contentSize = CGSizeMake(contentSizeWidth, contentSizeHeight);
 
+    
     CGFloat xOffset = kRowIndexesTableWidth;
     for (int playerIndex=0; playerIndex<[self.players count]; playerIndex++) {
         UITableView *verticalPlayerView = [[UITableView alloc] initWithFrame:self.scrollView.bounds];
         verticalPlayerView = [(UITableViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"VerticalScores"] tableView];
         verticalPlayerView.tag = playerIndex;
+        
+        [tablesArray addObject:verticalPlayerView];
         
         [self.scrollView addSubview:verticalPlayerView];
         
@@ -141,8 +139,8 @@ static const double kRowIndexesTableWidth = 40.0;
         
         NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:xOffset];
         NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-        NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:verticalViewHeight];
-        NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeWidth multiplier:verticalWidthRatio constant:0.0];
+        NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+        NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:verticalViewWidth];
         
         [self.scrollView addConstraints:@[xConstraint, yConstraint, heightConstraint, widthConstraint]];
         
@@ -151,35 +149,68 @@ static const double kRowIndexesTableWidth = 40.0;
         
         verticalPlayerView.delegate = self;
         verticalPlayerView.dataSource = self;
+        
+        [verticalPlayerView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:NULL];
     }
     
-    [self.scrollView setNeedsUpdateConstraints];
+    self.tables = tablesArray;
     
-    [self loadPlayersInfo];
+    [self.scrollView setNeedsUpdateConstraints];
 }
 
-- (void)loadPlayersInfo {
-    [self.scrollView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([view isKindOfClass:[UITableView class]]) {
-            if ([[(UITableView *)view tableHeaderView] isKindOfClass:[AJPlayerHeaderView class]]) {
-                AJPlayerHeaderView *headerView = (AJPlayerHeaderView *)((UITableView *)view).tableHeaderView;
-                AJPlayer *player = self.players[idx-1];// TODO: make sure this is ok
-                headerView.playerNameLabel.text = player.name;
-                headerView.playerTotalLabel.text = [NSString stringWithFormat:@"%g", [self.scoresManager totalForPlayer:player]];
-            }
-        }
-    }];
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self removeTableViews];
+}
+
+- (void)removeTableViews {
+    
+    for (UITableView *tableView in self.tables) {
+        [tableView removeFromSuperview];
+        
+        [tableView removeObserver:self forKeyPath:@"contentOffset"];
+        [tableView setDataSource:nil];
+        [tableView setDelegate:nil];
+    }
+    
+//    for (UIView *scrollViewSubview in self.scrollView.subviews) {
+//        if ([scrollViewSubview isKindOfClass:[UITableView class]] && (scrollViewSubview.tag == -1)) {
+//            [scrollViewSubview removeObserver:self forKeyPath:@"contentOffset"];
+//            [(UITableView *)scrollViewSubview setDataSource:nil];
+//            [(UITableView *)scrollViewSubview setDelegate:nil];
+//        }
+//        [scrollViewSubview removeFromSuperview];
+//    }
+    
+    self.tables = nil;
 }
 
 - (void)dealloc {
-    if ([self.scrollView.subviews count] > 0) {
+    
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    static BOOL isObservingContentOffsetChange = NO;
+    if([object isKindOfClass:[UITableView class]] && [keyPath isEqualToString:@"contentOffset"]) {
+        if(isObservingContentOffsetChange) return;
+        
+        isObservingContentOffsetChange = YES;
         for (UIView *scrollViewSubview in self.scrollView.subviews) {
             if ([scrollViewSubview isKindOfClass:[UITableView class]]) {
-                [(UITableView *)scrollViewSubview setDataSource:nil];
-                [(UITableView *)scrollViewSubview setDelegate:nil];
+                //if (scrollViewSubview.tag != -1) {
+                    if(scrollViewSubview != object) {
+                        CGPoint offset = [[change valueForKey:NSKeyValueChangeNewKey] CGPointValue];
+                        ((UITableView *)scrollViewSubview).contentOffset = offset;
+                    }
+                //}
             }
         }
+        isObservingContentOffsetChange = NO;
+        return;
     }
+    
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 
@@ -217,30 +248,6 @@ static const double kRowIndexesTableWidth = 40.0;
             
             [self reloadData];
         }
-    } else if (alertView.tag == ADD_NEW_SCORE_ALERT_TAG) {
-        if (buttonIndex != alertView.cancelButtonIndex) {
-            if ([[alertView textFieldAtIndex:0] text]) {
-                for (AJPlayer *player in self.players) {
-                    if (player == self.selectedPlayer) {
-                        [self.scoresManager insertNewScoreWithValue:[[alertView textFieldAtIndex:0] text].doubleValue forPlayer:self.selectedPlayer];
-                    } else {
-                        [self.scoresManager insertNewScoreWithValue:0.0 forPlayer:player];
-                    }
-                }
-                
-                [self reloadData];
-            }
-            
-        }
-        self.selectedPlayer = nil;
-    } else if (alertView.tag == EDIT_SCORE_ALERT_TAG) {
-        if (buttonIndex != alertView.cancelButtonIndex) {
-            self.selectedScore.value = @([[alertView textFieldAtIndex:0] text].doubleValue);
-            [self.scoresManager saveContext];
-            
-            [self reloadData];
-        }
-        self.selectedScore = nil;
     }
 }
 
@@ -291,14 +298,34 @@ static const double kRowIndexesTableWidth = 40.0;
     return cell;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (tableView.tag != -1) {
+        AJPlayer *player = self.players[tableView.tag];
+
+        UITableViewCell *headerView = [tableView dequeueReusableCellWithIdentifier:@"PlayerHeader"];
+        UILabel *nameLabel = [headerView viewWithTag:1000]; // name label
+        nameLabel.text = player.name;
+        UILabel *totalLabel = [headerView viewWithTag:1001]; // total label
+        totalLabel.text = [NSString stringWithFormat:@"%g", [self.scoresManager totalForPlayer:player]];
+        
+        return headerView;
+    } else {
+        UIView *header = [[tableView dequeueReusableCellWithIdentifier:@"RoundsHeader"] contentView];
+        header.backgroundColor = [UIColor whiteColor];
+        return (section == 0) ? header : nil;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    return section == 0 ? 62.0 : 0.0;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView.tag == -1) {
         if (indexPath.section == 0) {
             [self.scrollView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
                 if ([view isKindOfClass:[UITableView class]]) {
-                    if ([[(UITableView *)view tableHeaderView] isKindOfClass:[AJPlayerHeaderView class]]) {
-                        [(UITableView *)view selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-                    }
+                    [(UITableView *)view selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
                 }
             }];
         } else if (indexPath.section == 1) {
