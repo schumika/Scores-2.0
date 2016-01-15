@@ -96,8 +96,6 @@ static const double kRowIndexesTableWidth = 40.0;
     
     CGFloat verticalViewWidth = MAX((CGRectGetWidth(self.view.bounds) - kRowIndexesTableWidth) / numberOfPlayers, 90.0) ;
     
-    //CGFloat verticalWidthRatio = verticalViewWidth / self.view.bounds.size.width;
-    
     CGFloat contentSizeWidth = verticalViewWidth * numberOfPlayers + kRowIndexesTableWidth;
     CGFloat contentSizeHeight = CGRectGetHeight(self.scrollView.frame);
     
@@ -107,6 +105,7 @@ static const double kRowIndexesTableWidth = 40.0;
     rowIndexesTableView.tag = -1;
     rowIndexesTableView.delegate = self;
     rowIndexesTableView.dataSource = self;
+    [rowIndexesTableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressedGestureRecognized:)]];
     
     [self.scrollView addSubview:rowIndexesTableView];
     self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -174,15 +173,6 @@ static const double kRowIndexesTableWidth = 40.0;
         [tableView setDelegate:nil];
     }
     
-//    for (UIView *scrollViewSubview in self.scrollView.subviews) {
-//        if ([scrollViewSubview isKindOfClass:[UITableView class]] && (scrollViewSubview.tag == -1)) {
-//            [scrollViewSubview removeObserver:self forKeyPath:@"contentOffset"];
-//            [(UITableView *)scrollViewSubview setDataSource:nil];
-//            [(UITableView *)scrollViewSubview setDelegate:nil];
-//        }
-//        [scrollViewSubview removeFromSuperview];
-//    }
-    
     self.tables = nil;
 }
 
@@ -198,12 +188,10 @@ static const double kRowIndexesTableWidth = 40.0;
         isObservingContentOffsetChange = YES;
         for (UIView *scrollViewSubview in self.scrollView.subviews) {
             if ([scrollViewSubview isKindOfClass:[UITableView class]]) {
-                //if (scrollViewSubview.tag != -1) {
-                    if(scrollViewSubview != object) {
-                        CGPoint offset = [[change valueForKey:NSKeyValueChangeNewKey] CGPointValue];
-                        ((UITableView *)scrollViewSubview).contentOffset = offset;
-                    }
-                //}
+                if(scrollViewSubview != object) {
+                    CGPoint offset = [[change valueForKey:NSKeyValueChangeNewKey] CGPointValue];
+                    ((UITableView *)scrollViewSubview).contentOffset = offset;
+                }
             }
         }
         isObservingContentOffsetChange = NO;
@@ -375,5 +363,68 @@ static const double kRowIndexesTableWidth = 40.0;
         }
     }
 }
+
+- (IBAction)longPressedGestureRecognized:(UILongPressGestureRecognizer *)gestureRecognizer {
+    if (gestureRecognizer.state == UIGestureRecognizerStateBegan) {
+        UITableView *roundsTableView = self.tables[0];
+        CGPoint point = [gestureRecognizer locationInView:roundsTableView];
+        NSIndexPath *indexPath = [roundsTableView indexPathForRowAtPoint:point];
+        if (indexPath.section > 0) {
+            [roundsTableView deselectRowAtIndexPath:indexPath animated:YES];
+        } else {
+            // select the round
+            [self.tables enumerateObjectsUsingBlock:^(__kindof UITableView * _Nonnull tableView, NSUInteger idx, BOOL * _Nonnull stop) {
+                [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            }];
+            // present action sheet
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:nil message:@"What do you want to do with the selected round?" preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertAction *deleteRoundAction = [UIAlertAction actionWithTitle:@"Delete all scores from round" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self.tables enumerateObjectsUsingBlock:^(__kindof UITableView * _Nonnull tableView, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (idx > 0) {
+                        // player table
+                        [tableView beginUpdates];
+                        AJPlayer *player = self.players[idx-1];
+                        AJScore *score = [self.scoresManager getScoresForPlayer:player][indexPath.row];
+                        [self.scoresManager deleteScore:score];
+                        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
+                        self.players = [self.scoresManager getPlayersForGame:self.game];
+                        [tableView endUpdates];
+                    }
+                }];
+                
+                [roundsTableView beginUpdates];
+                [roundsTableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationMiddle];
+                [roundsTableView endUpdates];
+                [roundsTableView reloadData];
+            }];
+            [alertController addAction:deleteRoundAction];
+            UIAlertAction *makeZero = [UIAlertAction actionWithTitle:@"Make zero all scores from round" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                // deselect round
+                [self.tables enumerateObjectsUsingBlock:^(__kindof UITableView * _Nonnull tableView, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (idx > 0) {
+                        AJPlayer *player = self.players[idx-1];
+                        AJScore *score = [self.scoresManager getScoresForPlayer:player][indexPath.row];
+                        score.value = @(0);
+                    }
+                }];
+                [self.scoresManager saveContext];
+                [self reloadData];
+            }];
+            [alertController addAction:makeZero];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                // deselect round
+                [self.tables enumerateObjectsUsingBlock:^(__kindof UITableView * _Nonnull tableView, NSUInteger idx, BOOL * _Nonnull stop) {
+                    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+                }];
+            }];
+            [alertController addAction:cancelAction];
+            [self presentViewController:alertController animated:YES completion:NULL];
+        }
+
+    }
+        
+}
+
+
 
 @end

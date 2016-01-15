@@ -180,6 +180,11 @@
     [self saveContext];
 }
 
+- (void)deleteScore:(AJScore *)score {
+    [self.managedObjectContext deleteObject:score];
+    [self saveContext];
+}
+
 - (double)totalForPlayer:(AJPlayer *)player {
     NSArray *scores = [self getScoresForPlayer:player];
     
