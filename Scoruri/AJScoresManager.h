@@ -11,6 +11,7 @@
 
 @class AJGame;
 @class AJPlayer;
+@class AJScore;
 
 
 @interface AJScoresManager : NSObject
@@ -21,12 +22,16 @@
 - (NSArray *)getAllGames;
 - (void)insertNewGameWithName:(NSString *)gameName;
 - (void)deleteGame:(AJGame *)game;
+
 - (NSArray *)getPlayersForGame:(AJGame *)game;
-- (NSArray *)getScoresForPlayer:(AJPlayer *)player;
 - (double)totalForPlayer:(AJPlayer *)player;
 - (AJPlayer *)insertNewPlayerWithName:(NSString *)playerName forGame:(AJGame *)game;
 - (void)deletePlayer:(AJPlayer *)player;
+
+- (NSArray *)getScoresForPlayer:(AJPlayer *)player;
 - (void)insertNewScoreWithValue:(double)val forPlayer:(AJPlayer *)player;
+- (void)deleteScore:(AJScore *)score;
+
 - (int)maximumNumberOfScoresForGame:(AJGame *)game;
 
 // For Testing purposes
