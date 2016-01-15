@@ -236,6 +236,14 @@ static const double kRowIndexesTableWidth = 40.0;
             
             [self reloadData];
         }
+    } else if (alertView.tag == EDIT_SCORE_ALERT_TAG) {
+        if (buttonIndex != alertView.cancelButtonIndex) {
+            self.selectedScore.value = @([[alertView textFieldAtIndex:0] text].doubleValue);
+            [self.scoresManager saveContext];
+            
+            [self reloadData];
+        }
+        self.selectedScore = nil;
     }
 }
 
