@@ -33,6 +33,7 @@
 @property (nonatomic, strong) AJScore *selectedScore;
 
 @property (nonatomic, strong) NSArray *tables;
+@property (nonatomic, assign) int selectedRow;
 
 @property (weak, nonatomic) IBOutlet UILabel *noGamesLabel;
 
@@ -62,6 +63,7 @@ static const double kRowIndexesTableWidth = 40.0;
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    self.selectedRow = -1;
     [self reloadData];
 }
 
@@ -240,10 +242,11 @@ static const double kRowIndexesTableWidth = 40.0;
         if (buttonIndex != alertView.cancelButtonIndex) {
             self.selectedScore.value = @([[alertView textFieldAtIndex:0] text].doubleValue);
             [self.scoresManager saveContext];
-            
-            [self reloadData];
         }
+        // deselect selected score
+        
         self.selectedScore = nil;
+        [self reloadData];
     }
 }
 
@@ -319,11 +322,11 @@ static const double kRowIndexesTableWidth = 40.0;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (tableView.tag == -1) {
         if (indexPath.section == 0) {
-            [self.scrollView.subviews enumerateObjectsUsingBlock:^(__kindof UIView * _Nonnull view, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([view isKindOfClass:[UITableView class]]) {
-                    [(UITableView *)view selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-                }
-            }];
+            if (self.selectedRow == indexPath.row) {
+                [self setSelected:NO row:indexPath.row];
+            } else {
+                [self setSelected:YES row:indexPath.row];
+            }
         } else if (indexPath.section == 1) {
             for (AJPlayer *player in self.players) {
                 [self.scoresManager insertNewScoreWithValue:0.0 forPlayer:player];
@@ -332,11 +335,14 @@ static const double kRowIndexesTableWidth = 40.0;
             [self reloadData];
         }
     } else {
-        
-        self.selectedPlayer = self.players[tableView.tag];
-        
         // user clicked on existing score to edit
         
+        if (self.selectedRow != -1) {
+            [self setSelected:NO row:self.selectedRow];
+            [tableView selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }
+        
+        self.selectedPlayer = self.players[tableView.tag];
         self.selectedScore = [self.scoresManager getScoresForPlayer:self.players[tableView.tag]][indexPath.row];;
         
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:[NSString stringWithFormat:@"Edit score for %@", self.selectedScore.player.name]
@@ -346,6 +352,17 @@ static const double kRowIndexesTableWidth = 40.0;
         [alertView textFieldAtIndex:0].keyboardType = UIKeyboardTypeNumbersAndPunctuation;
         [alertView show];
     }
+}
+
+- (void)setSelected:(BOOL)selected row:(int)row {
+    [self.tables enumerateObjectsUsingBlock:^(__kindof UITableView * _Nonnull table, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (selected) {
+            [table selectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        } else {
+            [table deselectRowAtIndexPath:[NSIndexPath indexPathForRow:row inSection:0] animated:NO];
+        }
+    }];
+    self.selectedRow = selected ? row : -1;
 }
 
 #pragma mark - AJGamesTableViewControllerDelegate methods

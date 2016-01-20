@@ -38,7 +38,7 @@
     NSArray *games = [self.scoresManager getAllGames];
     playersScrollViewController.game = [games count] ? games[0] : nil;
     detailNavigationController.navigationItem.leftItemsSupplementBackButton = YES;
-    detailNavigationController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
+    playersScrollViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
     
     return YES;
 }
