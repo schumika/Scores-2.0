@@ -38,7 +38,10 @@
     NSArray *games = [self.scoresManager getAllGames];
     playersScrollViewController.game = [games count] ? games[0] : nil;
     detailNavigationController.navigationItem.leftItemsSupplementBackButton = YES;
-    playersScrollViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
+    if ([(NSString*)[UIDevice currentDevice].model hasPrefix:@"iPad"]) {
+        playersScrollViewController.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem;
+    }
+    
     
     return YES;
 }

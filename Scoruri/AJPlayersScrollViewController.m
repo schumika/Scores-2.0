@@ -91,7 +91,7 @@ static const double kRowIndexesTableWidth = 40.0;
 }
 
 - (void)loadScrollViewData {
-
+    
     [self removeTableViews];
     
     int numberOfPlayers = (int)[self.players count];
@@ -101,62 +101,65 @@ static const double kRowIndexesTableWidth = 40.0;
     CGFloat contentSizeWidth = verticalViewWidth * numberOfPlayers + kRowIndexesTableWidth;
     CGFloat contentSizeHeight = CGRectGetHeight(self.scrollView.frame);
     
-     NSMutableArray *tablesArray = [NSMutableArray array];
+    NSMutableArray *tablesArray = [NSMutableArray array];
     
-    UITableView *rowIndexesTableView = [(UITableViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"RowIndexes"] tableView];
-    rowIndexesTableView.tag = -1;
-    rowIndexesTableView.delegate = self;
-    rowIndexesTableView.dataSource = self;
-    [rowIndexesTableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressedGestureRecognized:)]];
-    
-    [self.scrollView addSubview:rowIndexesTableView];
-    self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    rowIndexesTableView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0.0];
-    NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
-    NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:kRowIndexesTableWidth];
-    
-    [self.scrollView addConstraints:@[xConstraint, yConstraint, heightConstraint, widthConstraint]];
-    [rowIndexesTableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:NULL];
-    [tablesArray addObject:rowIndexesTableView];
-    
-    self.scrollView.contentSize = CGSizeMake(contentSizeWidth, contentSizeHeight);
-
-    
-    CGFloat xOffset = kRowIndexesTableWidth;
-    for (int playerIndex=0; playerIndex<[self.players count]; playerIndex++) {
-        UITableView *verticalPlayerView = [[UITableView alloc] initWithFrame:self.scrollView.bounds];
-        verticalPlayerView = [(UITableViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"VerticalScores"] tableView];
-        verticalPlayerView.tag = playerIndex;
+    if ([self.players count] > 0) {
+        UITableView *rowIndexesTableView = [(UITableViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"RowIndexes"] tableView];
+        rowIndexesTableView.tag = -1;
+        rowIndexesTableView.delegate = self;
+        rowIndexesTableView.dataSource = self;
+        [rowIndexesTableView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longPressedGestureRecognized:)]];
         
-        [tablesArray addObject:verticalPlayerView];
+        [self.scrollView addSubview:rowIndexesTableView];
+        self.scrollView.translatesAutoresizingMaskIntoConstraints = NO;
         
-        [self.scrollView addSubview:verticalPlayerView];
+        rowIndexesTableView.translatesAutoresizingMaskIntoConstraints = NO;
         
-        verticalPlayerView.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:xOffset];
-        NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-        NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
-        NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:verticalViewWidth];
+        NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:0.0];
+        NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+        NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+        NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:rowIndexesTableView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:kRowIndexesTableWidth];
         
         [self.scrollView addConstraints:@[xConstraint, yConstraint, heightConstraint, widthConstraint]];
+        [rowIndexesTableView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:NULL];
+        [tablesArray addObject:rowIndexesTableView];
+        
+        self.scrollView.contentSize = CGSizeMake(contentSizeWidth, contentSizeHeight);
         
         
-        xOffset += verticalViewWidth;
+        CGFloat xOffset = kRowIndexesTableWidth;
+        for (int playerIndex=0; playerIndex<[self.players count]; playerIndex++) {
+            UITableView *verticalPlayerView = [[UITableView alloc] initWithFrame:self.scrollView.bounds];
+            verticalPlayerView = [(UITableViewController *)[self.storyboard instantiateViewControllerWithIdentifier:@"VerticalScores"] tableView];
+            verticalPlayerView.tag = playerIndex;
+            
+            [tablesArray addObject:verticalPlayerView];
+            
+            [self.scrollView addSubview:verticalPlayerView];
+            
+            verticalPlayerView.translatesAutoresizingMaskIntoConstraints = NO;
+            
+            NSLayoutConstraint *xConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeLeading relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeLeading multiplier:1.0 constant:xOffset];
+            NSLayoutConstraint *yConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+            NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.scrollView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+            NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:verticalPlayerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:verticalViewWidth];
+            
+            [self.scrollView addConstraints:@[xConstraint, yConstraint, heightConstraint, widthConstraint]];
+            
+            
+            xOffset += verticalViewWidth;
+            
+            verticalPlayerView.delegate = self;
+            verticalPlayerView.dataSource = self;
+            
+            [verticalPlayerView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:NULL];
+            self.tables = tablesArray;
+            
+            [self.scrollView setNeedsUpdateConstraints];
+        }
         
-        verticalPlayerView.delegate = self;
-        verticalPlayerView.dataSource = self;
         
-        [verticalPlayerView addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew context:NULL];
     }
-    
-    self.tables = tablesArray;
-    
-    [self.scrollView setNeedsUpdateConstraints];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
